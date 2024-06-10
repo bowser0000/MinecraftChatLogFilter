@@ -1,45 +1,19 @@
 package main;
 
-import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.WindowConstants;
-import javax.swing.border.EmptyBorder;
-
 import util.LogRecords;
 import util.MCLogFile;
 import util.MCLogLine;
 import util.OSFileSystem;
-import javax.swing.JMenu;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.SwingConstants;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -50,26 +24,18 @@ public class MainWindow extends JFrame {
 	private static MainWindow mainWindow;
 	private FolderWindow folderWindow;
 
-	private JPanel contentPane;
-	private JTextArea inputTextField;
-	private JTextArea outputTextField;
-	private JScrollPane scrollPaneBottom;
-	private JTextArea statusTextField;
-	private JPanel panel_north;
+    private final JTextArea inputTextField;
+	private final JTextArea outputTextField;
+	private final JScrollPane scrollPaneBottom;
+	private final JTextArea statusTextField;
 
-	private TreeSet<String> additionalFolderPaths = new TreeSet<>();
-	private LogRecords logRecords;
+    private final TreeSet<String> additionalFolderPaths = new TreeSet<>();
 
-	private int tmpStauslength = 0;
-	private JPanel panel_south;
-	private JMenuBar menuBar;
-	private JMenu mnOptionsMenu;
-	private JMenuItem addFoldersButtonMenuItem;
-	private JCheckBoxMenuItem onlyChatCheckBoxMenu;
-	private Component horizontalGlue_1;
-	private Button defaultButton;
-	private Component horizontalGlue_2;
-	private JCheckBoxMenuItem stripColorCodesCheckBoxMenu;
+    private int tmpStauslength = 0;
+    private final JMenuItem addFoldersButtonMenuItem;
+	private final JCheckBoxMenuItem onlyChatCheckBoxMenu;
+    private final Button defaultButton;
+    private final JCheckBoxMenuItem stripColorCodesCheckBoxMenu;
 
 	/**
 	 * Create the frame.
@@ -82,35 +48,31 @@ public class MainWindow extends JFrame {
 		setBounds(100, 100, 800, 540);
 		setMinimumSize(getSize());
 		setLocationRelativeTo(null);
-		contentPane = new JPanel();
+        JPanel contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 5));
 		setContentPane(contentPane);
 
 		// add buttons
-		panel_north = new JPanel();
+        JPanel panel_north = new JPanel();
 		contentPane.add(panel_north, BorderLayout.NORTH);
 		panel_north.setLayout(new BoxLayout(panel_north, BoxLayout.X_AXIS));
 
-		horizontalGlue_2 = Box.createHorizontalGlue();
+        Component horizontalGlue_2 = Box.createHorizontalGlue();
 		panel_north.add(horizontalGlue_2);
 
 		defaultButton = new Button("Start analyzing currently known .minecraft folders");
-		defaultButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				startAnalysis();
-			}
-		});
+		defaultButton.addActionListener(e -> startAnalysis());
 		defaultButton.setForeground(Color.BLUE);
 		defaultButton.setFont(new Font("Consolas", Font.PLAIN, 14));
 		defaultButton.setBackground(new Color(240, 248, 255));
 		panel_north.add(defaultButton);
 
-		menuBar = new JMenuBar();
+        JMenuBar menuBar = new JMenuBar();
 		menuBar.setBorderPainted(false);
 		panel_north.add(menuBar);
 
-		mnOptionsMenu = new JMenu("");
+        JMenu mnOptionsMenu = new JMenu("");
 		mnOptionsMenu.setIcon(new ImageIcon(MainWindow.class.getResource("/icons/icon-more-20.png")));
 		mnOptionsMenu.setSize(20, 20);
 		mnOptionsMenu.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -119,22 +81,14 @@ public class MainWindow extends JFrame {
 
 		addFoldersButtonMenuItem = new JMenuItem("Add custom .minecraft folder locations");
 		addFoldersButtonMenuItem.setFont(new Font("Consolas", Font.PLAIN, 14));
-		addFoldersButtonMenuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				EventQueue.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							if (folderWindow == null)
-								folderWindow = new FolderWindow(mainWindow);
-							folderWindow.setVisible(true);
-						} catch (Exception ignored) {
-						}
-					}
-				});
-			}
-		});
+		addFoldersButtonMenuItem.addActionListener(e -> EventQueue.invokeLater(() -> {
+            try {
+                if (folderWindow == null)
+                    folderWindow = new FolderWindow(mainWindow);
+                folderWindow.setVisible(true);
+            } catch (Exception ignored) {
+            }
+        }));
 		mnOptionsMenu.add(addFoldersButtonMenuItem);
 
 		stripColorCodesCheckBoxMenu = new JCheckBoxMenuItem("Strip color codes");
@@ -147,10 +101,10 @@ public class MainWindow extends JFrame {
 		onlyChatCheckBoxMenu.setSelected(true);
 		mnOptionsMenu.add(onlyChatCheckBoxMenu);
 
-		horizontalGlue_1 = Box.createHorizontalGlue();
+        Component horizontalGlue_1 = Box.createHorizontalGlue();
 		panel_north.add(horizontalGlue_1);
 
-		panel_south = new JPanel();
+        JPanel panel_south = new JPanel();
 		contentPane.add(panel_south, BorderLayout.CENTER);
 		panel_south.setLayout(new BorderLayout(0, 0));
 
@@ -190,12 +144,7 @@ public class MainWindow extends JFrame {
 	private void startAnalysis() {
 		defaultButton.setEnabled(false);
 		addFoldersButtonMenuItem.setEnabled(false);
-		Thread t0 = new Thread() {
-			@Override
-			public void run() {
-				mainWindow.analyze(onlyChatCheckBoxMenu.getState(), stripColorCodesCheckBoxMenu.getState());
-			}
-		};
+		Thread t0 = new Thread(() -> mainWindow.analyze(onlyChatCheckBoxMenu.getState(), stripColorCodesCheckBoxMenu.getState()));
 		t0.start();
 	}
 
@@ -218,23 +167,20 @@ public class MainWindow extends JFrame {
 
 			int counter = 0;
 			int fileCount = allFiles.size();
-			MCLogFile minecraftLogFile = null;
+			MCLogFile minecraftLogFile;
 			TreeMap<String, Integer> playerNames = new TreeMap<>();
 			String lastLoginName = null;
-			String lineFilter = null;
+			String lineFilter;
 
 			String logLineSpecialFilterRegex = inputTextField.getText();
 
 			List<MCLogLine> relevantLogLines = new ArrayList<>();
-			logRecords = new LogRecords(relevantLogLines, logLineSpecialFilterRegex);
+            LogRecords logRecords = new LogRecords(relevantLogLines, logLineSpecialFilterRegex);
 
-			Collections.sort(allFiles, new Comparator<File>() {
-				@Override
-				public int compare(File f1, File f2) {
-					long tmp = getLastModifiedTime(f1) - getLastModifiedTime(f2);
-					return tmp < 0 ? -1 : tmp > 0 ? 1 : 0;
-				}
-			});
+			allFiles.sort((f1, f2) -> {
+                long tmp = getLastModifiedTime(f1) - getLastModifiedTime(f2);
+                return tmp < 0 ? -1 : tmp > 0 ? 1 : 0;
+            });
 			for (File logFile : allFiles) {
 				if (counter++ % 50 == 0)
 					addStatusTemporaryly(
@@ -247,13 +193,12 @@ public class MainWindow extends JFrame {
 					}
 					lineFilter = logRecords.getLineFilter();
 					relevantLogLines.addAll(minecraftLogFile.filterLines(lineFilter, lastLoginName));
-				} catch (FileNotFoundException ignored) {
 				} catch (IOException ignored) {
 				}
 			}
 			Collections.sort(relevantLogLines);
 
-			String name = playerNames.entrySet().stream().max((a, b) -> a.getValue() - b.getValue()).get().getKey();
+			String name = playerNames.entrySet().stream().max(Comparator.comparingInt(Map.Entry::getValue)).get().getKey();
 			for (MCLogLine l : relevantLogLines) {
 				if (l.getPlayerName() == null)
 					l.setPlayerName(name);
@@ -278,7 +223,7 @@ public class MainWindow extends JFrame {
 			defaultButton.setEnabled(true);
 			addFoldersButtonMenuItem.setEnabled(true);
 		} catch (Exception e) {
-			addStatus("ERROR: " + e.toString());
+			addStatus("ERROR: " + e);
 			StringBuilder sb = new StringBuilder();
 			for (StackTraceElement elem : e.getStackTrace()) {
 				sb.append("        ");
@@ -293,17 +238,14 @@ public class MainWindow extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					mainWindow = new MainWindow();
-					mainWindow.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		EventQueue.invokeLater(() -> {
+            try {
+                mainWindow = new MainWindow();
+                mainWindow.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 	}
 
 	/**
@@ -350,7 +292,7 @@ public class MainWindow extends JFrame {
 
 	private File getPreviousFileInFolder(int counter, ArrayList<File> allFiles) {
 		File current = allFiles.get(counter - 1);
-		File previous = null;
+		File previous;
 		for (int i = counter - 1; i > 0; i--) {
 			previous = allFiles.get(i - 1);
 			if (previous.getParentFile().equals(current.getParentFile()) && previous.getName().endsWith(".gz"))

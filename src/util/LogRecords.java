@@ -6,10 +6,10 @@ import java.util.Stack;
 
 public class LogRecords extends ArrayList<MCLogLine> {
 	private static final long serialVersionUID = 1L;
-	private String filter;
-	private ArrayList<ArrayList<String>> extractedFilters;
-	private String lineFilter;
-	private List<MCLogLine> logLines;
+	private final String filter;
+	private final ArrayList<ArrayList<String>> extractedFilters;
+	private final String lineFilter;
+	private final List<MCLogLine> logLines;
 
 	public LogRecords(List<MCLogLine> relevantLogLines, String filter) {
 		this.logLines = relevantLogLines;
@@ -32,9 +32,9 @@ public class LogRecords extends ArrayList<MCLogLine> {
 		ArrayList<Integer> indices = new ArrayList<>();
 		Stack<Integer> brackets = new Stack<>();
 		int level = 0;
-		int bracketType = -1;
+		int bracketType;
 		char lastChar = ' ';
-		char currentChar = ' ';
+		char currentChar;
 		for (int i = 0; i < regex.length(); i++) {
 			currentChar = regex.charAt(i);
 			if (lastChar == '\\' || "^$?*+".indexOf(currentChar) >= 0)
@@ -64,9 +64,9 @@ public class LogRecords extends ArrayList<MCLogLine> {
 		ArrayList<Integer> indices = new ArrayList<>();
 		Stack<Integer> brackets = new Stack<>();
 		int level = 0;
-		int bracketType = -1;
+		int bracketType;
 		char lastChar = ' ';
-		char currentChar = ' ';
+		char currentChar;
 		for (int i = 0; i < regex.length(); i++) {
 			currentChar = regex.charAt(i);
 			if (lastChar == '\\' || "^$?*+".indexOf(currentChar) >= 0)
@@ -98,9 +98,7 @@ public class LogRecords extends ArrayList<MCLogLine> {
 	 * was added to a list
 	 *
 	 * @param recordStartLine - start line
-	 * @param logLines        - the list with all the MinecraftLogLine objects
-	 * @return - the line where the parsing should continue
-	 */
+     */
 	public void add(int recordStartLine) {
 		int lineIndex = recordStartLine;
 		MCLogLine line = logLines.get(lineIndex);
@@ -131,8 +129,7 @@ public class LogRecords extends ArrayList<MCLogLine> {
 			}
 			add(foundLine);
 		}
-		return;
-	}
+    }
 
 	public String getLineFilter() {
 		return lineFilter;

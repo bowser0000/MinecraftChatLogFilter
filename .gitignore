@@ -1,1 +1,6 @@
 builds/
+classes/
+*.iml
+*.xml
+.project
+.classpath

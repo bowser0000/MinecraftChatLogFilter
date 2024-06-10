@@ -1,29 +1,14 @@
 package main;
 
-import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.TextField;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import java.awt.*;
 
 public class FolderWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	private JPanel contentPane;
-	private TextField folderPathInput;
-	private JTextArea folderPathOutput;
+    private final TextField folderPathInput;
+	private final JTextArea folderPathOutput;
 
 	/**
 	 * Create the frame.
@@ -35,7 +20,7 @@ public class FolderWindow extends JFrame {
 		setBounds(100, 100, 595, 400);
 		setMinimumSize(getSize());
 		setLocationRelativeTo(null);
-		contentPane = new JPanel();
+        JPanel contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 5));
@@ -51,26 +36,18 @@ public class FolderWindow extends JFrame {
 
 		JFrame folderSelector = this;
 		Button folderSelectButton = new Button("Select Folder");
-		folderSelectButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				if (fileChooser.showOpenDialog(folderSelector) == JFileChooser.APPROVE_OPTION) {
-					String path = fileChooser.getSelectedFile().getAbsolutePath();
-					folderPathInput.setText(path);
-					addFolder(path, mainWindow);
-				}
-			}
-		});
+		folderSelectButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            if (fileChooser.showOpenDialog(folderSelector) == JFileChooser.APPROVE_OPTION) {
+                String path = fileChooser.getSelectedFile().getAbsolutePath();
+                folderPathInput.setText(path);
+                addFolder(path, mainWindow);
+            }
+        });
 
 		Button folderAddButton = new Button("Add");
-		folderAddButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				addFolder(folderPathInput.getText(), mainWindow);
-			}
-		});
+		folderAddButton.addActionListener(e -> addFolder(folderPathInput.getText(), mainWindow));
 		folderAddButton.setFont(new Font("Consolas", Font.PLAIN, 14));
 		panel.add(folderAddButton);
 

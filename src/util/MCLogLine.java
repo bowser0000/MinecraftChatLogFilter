@@ -5,14 +5,14 @@ package util;
  * @author doej1367
  */
 public class MCLogLine implements Comparable<MCLogLine> {
-	private long creationTime;
+	private final long creationTime;
 	private String playerName;
 	private String text;
 
 	public MCLogLine(long creationTime, String playerName, String text, boolean stripColorCodes) {
 		this.creationTime = creationTime;
 		this.playerName = playerName;
-		this.text = stripColorCodes ? text.replaceAll("ง.", "") : text;
+		this.text = stripColorCodes ? text.replaceAll("ยง.", "") : text;
 	}
 
 	public long getCreationTime() {

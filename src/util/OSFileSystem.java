@@ -1,10 +1,10 @@
 package util;
 
+import main.MainWindow;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import main.MainWindow;
 
 public class OSFileSystem {
 	private final MainWindow mainWindow;
@@ -25,7 +25,7 @@ public class OSFileSystem {
 
 		// adjust Minecraft file path to operating system and found drives
 		String homePath = System.getProperty("user.home");
-		File currentMinecraftFolder = null;
+		File currentMinecraftFolder;
 		switch (OSName.getOperatingSystemType()) {
 		case Windows:
 			mainWindow.addStatus("INFO: Found Windows operating system");

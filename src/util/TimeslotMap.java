@@ -8,13 +8,10 @@ import java.util.HashMap;
  */
 public class TimeslotMap extends HashMap<Integer, Integer> {
 	private static final long serialVersionUID = 1L;
-	private int days;
+	private final int days;
 	private final long timeSlotStart;
-	private final long skyblock_birthday = 1560211200000L;
-	private final long dungeon_birthday = 1594080000000L;
-	private final long floor_seven_birthday = 1605571200000L;
 
-	/**
+    /**
 	 *
 	 * @param slotDurationInDays
 	 * @param start              - starting time is 0 = skyblock_birthday, 1 =
@@ -22,7 +19,10 @@ public class TimeslotMap extends HashMap<Integer, Integer> {
 	 */
 	public TimeslotMap(int slotDurationInDays, int start) {
 		this.days = slotDurationInDays;
-		timeSlotStart = start == 0 ? skyblock_birthday : start == 1 ? dungeon_birthday : floor_seven_birthday;
+        long skyblock_birthday = 1560211200000L;
+        long floor_seven_birthday = 1605571200000L;
+        long dungeon_birthday = 1594080000000L;
+        timeSlotStart = start == 0 ? skyblock_birthday : start == 1 ? dungeon_birthday : floor_seven_birthday;
 		int timeSlotCount = (int) ((System.currentTimeMillis() - timeSlotStart) / (days * 86400000L));
 		for (int i = 0; i < timeSlotCount; i++)
 			put(i, 0);
