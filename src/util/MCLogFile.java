@@ -25,9 +25,8 @@ public class MCLogFile {
 		InputStream inputStream = Files.newInputStream(logFile.toPath());
 		if (logFile.getName().endsWith(".gz"))
 			inputStream = new GZIPInputStream(inputStream);
-		@SuppressWarnings("resource")
-		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "ISO-8859-1"));
-		final String userSettingLine = "\\[[0-9:]{8}\\] \\[Client thread/INFO\\]: Setting user: ";
+		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+		final String userSettingLine = "\\[[0-9:]{8}] \\[Client thread/INFO]: Setting user: ";
 		linesStream = br.lines().filter(a -> {
 			if (tmpPlayerName == null && a.matches(userSettingLine + ".*"))
 				tmpPlayerName = a.replaceAll(userSettingLine, "");
