@@ -73,7 +73,7 @@ public class MainWindow extends JFrame {
 		panel_north.add(menuBar);
 
         JMenu mnOptionsMenu = new JMenu("");
-		mnOptionsMenu.setIcon(new ImageIcon(MainWindow.class.getResource("/icons/icon-more-20.png")));
+		mnOptionsMenu.setIcon(new ImageIcon(this.getClass().getResource("/icon-more-20.png")));
 		mnOptionsMenu.setSize(20, 20);
 		mnOptionsMenu.setHorizontalAlignment(SwingConstants.RIGHT);
 		mnOptionsMenu.setFont(new Font("Consolas", Font.PLAIN, 14));
