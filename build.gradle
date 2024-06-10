@@ -2,8 +2,8 @@ plugins {
     id 'application'
 }
 
-group = 'org.example'
-version = '1.0'
+group = 'io.github.bowser0000'
+version = '1.1'
 
 repositories {
     mavenCentral()
