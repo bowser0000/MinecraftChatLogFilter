@@ -1,5 +1,7 @@
 package util;
 
+import org.mozilla.universalchardet.UniversalDetector;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -22,10 +24,21 @@ public class MCLogFile {
 		this.stripColorCodes = stripColorCodes;
 		creationTime = previousLogFile != null ? getCreationTime(previousLogFile) : getCreationTime(logFile) - 21600000;
 		startingTimeOfFile = null;
+
 		InputStream inputStream = Files.newInputStream(logFile.toPath());
-		if (logFile.getName().endsWith(".gz"))
-			inputStream = new GZIPInputStream(inputStream);
-		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+		if (logFile.getName().endsWith(".gz")) inputStream = new GZIPInputStream(inputStream);
+		String encoding = UniversalDetector.detectCharset(inputStream);
+
+		// detectCharset consumes input stream
+		InputStream newInputStream = Files.newInputStream(logFile.toPath());
+		if (logFile.getName().endsWith(".gz")) newInputStream = new GZIPInputStream(newInputStream);
+		BufferedReader br;
+		if ("WINDOWS-1252".equals(encoding)) {
+			br = new BufferedReader(new InputStreamReader(newInputStream, StandardCharsets.ISO_8859_1));
+		} else {
+			br = new BufferedReader(new InputStreamReader(newInputStream, StandardCharsets.UTF_8));
+		}
+
 		final String userSettingLine = "\\[[0-9:]{8}] \\[Client thread/INFO]: Setting user: ";
 		linesStream = br.lines().filter(a -> {
 			if (tmpPlayerName == null && a.matches(userSettingLine + ".*"))

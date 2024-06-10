@@ -12,3 +12,7 @@ repositories {
 application {
     mainClass = 'main.MainWindow'
 }
+
+dependencies {
+    implementation 'com.github.albfernandez:juniversalchardet:2.4.0'
+}

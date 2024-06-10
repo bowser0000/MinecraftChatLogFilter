@@ -198,7 +198,8 @@ public class MainWindow extends JFrame {
 			}
 			Collections.sort(relevantLogLines);
 
-			String name = playerNames.entrySet().stream().max(Comparator.comparingInt(Map.Entry::getValue)).get().getKey();
+			Optional<Map.Entry<String, Integer>> optionalName = playerNames.entrySet().stream().max(Comparator.comparingInt(Map.Entry::getValue));
+			String name = optionalName.map(Map.Entry::getKey).orElse(null);
 			for (MCLogLine l : relevantLogLines) {
 				if (l.getPlayerName() == null)
 					l.setPlayerName(name);
