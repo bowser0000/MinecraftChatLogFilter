@@ -22,3 +22,9 @@ application {
 dependencies {
     implementation 'com.github.albfernandez:juniversalchardet:2.4.0'
 }
+
+jar {
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
